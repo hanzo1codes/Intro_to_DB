@@ -2,11 +2,6 @@ import mysql.connector
 from mysql.connector import Error
 
 
-# Custom exception for database creation errors
-class DatabaseCreationError(Exception):
-    def __init__(self, message):
-        super().__init__("Database not created: " + message)
-
 def create_database():
     try:
         # Establish connection to MySQL server
@@ -22,15 +17,14 @@ def create_database():
                 # Attempt to create the database
                 cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
                 print("Database 'alx_book_store' created successfully!")
-            except Error as db_error:
-                raise DatabaseCreationError(f"Failed to create database: {db_error}")
+            except mysql.connector.Error as db_error:
+                print(f"Failed to create database: {db_error}")
             finally:
                 cursor.close()
 
-    except DatabaseCreationError as e:
-        print(e)
-    except Error as conn_error:
+    except mysql.connector.Error as conn_error:
         print(f"Error connecting to MySQL: {conn_error}")
+
     finally:
         if "connection" in locals() and connection.is_connected():
             connection.close()
