@@ -4,8 +4,8 @@ from mysql.connector import Error
 
 # Custom exception for database creation errors
 class DatabaseCreationError(Exception):
-    pass
-
+    def __init__(self, message):
+        super().__init__("Database not created: " + message)
 
 def create_database():
     try:
